@@ -20,10 +20,11 @@ if weekday == 4:  # 4 = vendredi
     st.write("🎉 C'est vendredi !")
     
     # Sous-condition : vérifier midi
-    if hour >= 12:
+    if hour >= 11:
         st.write("🍽️ C'est déjà midi !")
     else:
         st.write("⏳ Ce n'est pas encore midi.")
+
 
 
 
