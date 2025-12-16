@@ -29,28 +29,81 @@ if weekday == 4:  # 4 = vendredi
 if "pause" not in st.session_state:
     st.session_state.pause = False
 
+if "game" not in st.session_state:
+    st.session_state.game = None
+
 if st.button("🧘 Je fais une pause"):
     st.session_state.pause = True
+    st.session_state.game = random.choice(["number", "rps", "math"])
+
+# ===============================
+#           JEUX
+# ===============================
 
 if st.session_state.pause:
-    st.subheader("🎮 Mini-jeu : devine le nombre")
 
-    if "number_to_guess" not in st.session_state:
-        st.session_state.number_to_guess = random.randint(1, 10)
+    # -------- Jeu 1 : Deviner le nombre --------
+    if st.session_state.game == "number":
+        st.subheader("🎯 Devine le nombre")
 
-    guess = st.number_input(
-        "Devine un nombre entre 1 et 10",
-        min_value=1,
-        max_value=10,
-        step=1
-    )
+        if "secret" not in st.session_state:
+            st.session_state.secret = random.randint(1, 10)
 
-    if st.button("Valider"):
-        if guess == st.session_state.number_to_guess:
-            st.success("🎉 Bravo ! Tu as gagné 🎉")
-            st.session_state.number_to_guess = random.randint(1, 10)
-        else:
-            st.error("❌ Raté… essaie encore 😉")
+        guess = st.number_input(
+            "Choisis un nombre entre 1 et 10",
+            1, 10, step=1
+        )
+
+        if st.button("Valider"):
+            if guess == st.session_state.secret:
+                st.success("🎉 Bravo !")
+                st.session_state.secret = random.randint(1, 10)
+            else:
+                st.error("❌ Raté, réessaie 😉")
+
+    # -------- Jeu 2 : Pierre Feuille Ciseaux --------
+    elif st.session_state.game == "rps":
+        st.subheader("✊✋✌ Pierre – Feuille – Ciseaux")
+
+        choices = ["Pierre", "Feuille", "Ciseaux"]
+        player = st.radio("Ton choix :", choices)
+
+        if st.button("Jouer"):
+            computer = random.choice(choices)
+            st.write(f"🤖 L'ordinateur a choisi **{computer}**")
+
+            if player == computer:
+                st.info("🤝 Égalité")
+            elif (
+                (player == "Pierre" and computer == "Ciseaux") or
+                (player == "Feuille" and computer == "Pierre") or
+                (player == "Ciseaux" and computer == "Feuille")
+            ):
+                st.success("🎉 Tu gagnes !")
+            else:
+                st.error("❌ Tu perds !")
+
+    # -------- Jeu 3 : Calcul rapide --------
+    elif st.session_state.game == "math":
+        st.subheader("🧠 Calcul rapide")
+
+        if "a" not in st.session_state:
+            st.session_state.a = random.randint(1, 10)
+            st.session_state.b = random.randint(1, 10)
+
+        answer = st.number_input(
+            f"Combien font {st.session_state.a} + {st.session_state.b} ?",
+            step=1
+        )
+
+        if st.button("Valider"):
+            if answer == st.session_state.a + st.session_state.b:
+                st.success("✅ Bonne réponse !")
+                st.session_state.a = random.randint(1, 10)
+                st.session_state.b = random.randint(1, 10)
+            else:
+                st.error("❌ Mauvaise réponse")
+
 
 
 
