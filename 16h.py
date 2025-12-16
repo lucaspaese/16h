@@ -1,5 +1,6 @@
 import streamlit as st
 from datetime import datetime
+import random
 
 st.title("Vérification de l'heure")
 
@@ -50,6 +51,7 @@ if st.session_state.pause:
             st.session_state.number_to_guess = random.randint(1, 10)
         else:
             st.error("❌ Raté… essaie encore 😉")
+
 
 
 
