@@ -166,12 +166,13 @@ def space_invaders():
 
 
 if st.session_state.pause:
-    if st.session_state.game == "sudoku":
+    if st.session_state.game == "sudoku_game":
         sudoku_game()
-    elif st.session_state.game == "worm":
+    elif st.session_state.game == "worm_game":
         worm_game()
-    elif st.session_state.game == "space":
+    elif st.session_state.game == "space_invaders":
         space_invaders()
+
 
 
 
