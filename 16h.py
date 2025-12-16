@@ -25,6 +25,33 @@ if weekday == 4:  # 4 = vendredi
     else:
         st.write("⏳ Ce n'est pas encore midi.")
 
+if "pause" not in st.session_state:
+    st.session_state.pause = False
+
+if st.button("🧘 Je fais une pause"):
+    st.session_state.pause = True
+
+if st.session_state.pause:
+    st.subheader("🎮 Mini-jeu : devine le nombre")
+
+    if "number_to_guess" not in st.session_state:
+        st.session_state.number_to_guess = random.randint(1, 10)
+
+    guess = st.number_input(
+        "Devine un nombre entre 1 et 10",
+        min_value=1,
+        max_value=10,
+        step=1
+    )
+
+    if st.button("Valider"):
+        if guess == st.session_state.number_to_guess:
+            st.success("🎉 Bravo ! Tu as gagné 🎉")
+            st.session_state.number_to_guess = random.randint(1, 10)
+        else:
+            st.error("❌ Raté… essaie encore 😉")
+
+
 
 
 
