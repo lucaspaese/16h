@@ -40,13 +40,6 @@ if st.button("🧘 Je fais une pause"):
 #           JEUX
 # ===============================
 
-if st.session_state.pause:
-    if st.session_state.game == "sudoku":
-        sudoku_game()
-    elif st.session_state.game == "worm":
-        worm_game()
-    elif st.session_state.game == "space":
-        space_invaders()
 
 
 def sudoku_game():
@@ -171,6 +164,14 @@ def space_invaders():
         height=450
     )
 
+
+if st.session_state.pause:
+    if st.session_state.game == "sudoku":
+        sudoku_game()
+    elif st.session_state.game == "worm":
+        worm_game()
+    elif st.session_state.game == "space":
+        space_invaders()
 
 
 
