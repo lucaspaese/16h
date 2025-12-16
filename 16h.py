@@ -41,68 +41,136 @@ if st.button("🧘 Je fais une pause"):
 # ===============================
 
 if st.session_state.pause:
+    if st.session_state.game == "sudoku":
+        sudoku_game()
+    elif st.session_state.game == "worm":
+        worm_game()
+    elif st.session_state.game == "space":
+        space_invaders()
 
-    # -------- Jeu 1 : Deviner le nombre --------
-    if st.session_state.game == "number":
-        st.subheader("🎯 Devine le nombre")
 
-        if "secret" not in st.session_state:
-            st.session_state.secret = random.randint(1, 10)
+def sudoku_game():
+    st.subheader("🧩 Sudoku (simple)")
 
-        guess = st.number_input(
-            "Choisis un nombre entre 1 et 10",
-            1, 10, step=1
-        )
+    grid = [
+        [5, 3, "", "", 7, "", "", "", ""],
+        [6, "", "", 1, 9, 5, "", "", ""],
+        ["", 9, 8, "", "", "", "", 6, ""],
+        [8, "", "", "", 6, "", "", "", 3],
+        [4, "", "", 8, "", 3, "", "", 1],
+        [7, "", "", "", 2, "", "", "", 6],
+        ["", 6, "", "", "", "", 2, 8, ""],
+        ["", "", "", 4, 1, 9, "", "", 5],
+        ["", "", "", "", 8, "", "", 7, 9],
+    ]
 
-        if st.button("Valider"):
-            if guess == st.session_state.secret:
-                st.success("🎉 Bravo !")
-                st.session_state.secret = random.randint(1, 10)
-            else:
-                st.error("❌ Raté, réessaie 😉")
+    for i in range(9):
+        cols = st.columns(9)
+        for j in range(9):
+            with cols[j]:
+                if grid[i][j] == "":
+                    st.text_input("", key=f"{i}-{j}", max_chars=1)
+                else:
+                    st.markdown(f"**{grid[i][j]}**")
 
-    # -------- Jeu 2 : Pierre Feuille Ciseaux --------
-    elif st.session_state.game == "rps":
-        st.subheader("✊✋✌ Pierre – Feuille – Ciseaux")
+import streamlit.components.v1 as components
 
-        choices = ["Pierre", "Feuille", "Ciseaux"]
-        player = st.radio("Ton choix :", choices)
+def worm_game():
+    st.subheader("🐍 Worm")
 
-        if st.button("Jouer"):
-            computer = random.choice(choices)
-            st.write(f"🤖 L'ordinateur a choisi **{computer}**")
+    components.html(
+        """
+        <canvas id="game" width="400" height="400"></canvas>
+        <script>
+        const canvas = document.getElementById("game");
+        const ctx = canvas.getContext("2d");
 
-            if player == computer:
-                st.info("🤝 Égalité")
-            elif (
-                (player == "Pierre" and computer == "Ciseaux") or
-                (player == "Feuille" and computer == "Pierre") or
-                (player == "Ciseaux" and computer == "Feuille")
-            ):
-                st.success("🎉 Tu gagnes !")
-            else:
-                st.error("❌ Tu perds !")
+        let snake = [{x:200,y:200}];
+        let dir = {x:20,y:0};
+        let food = {x:100,y:100};
 
-    # -------- Jeu 3 : Calcul rapide --------
-    elif st.session_state.game == "math":
-        st.subheader("🧠 Calcul rapide")
+        document.addEventListener("keydown", e => {
+            if (e.key === "ArrowUp") dir={x:0,y:-20};
+            if (e.key === "ArrowDown") dir={x:0,y:20};
+            if (e.key === "ArrowLeft") dir={x:-20,y:0};
+            if (e.key === "ArrowRight") dir={x:20,y:0};
+        });
 
-        if "a" not in st.session_state:
-            st.session_state.a = random.randint(1, 10)
-            st.session_state.b = random.randint(1, 10)
+        function game(){
+            ctx.clearRect(0,0,400,400);
+            let head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+            snake.unshift(head);
 
-        answer = st.number_input(
-            f"Combien font {st.session_state.a} + {st.session_state.b} ?",
-            step=1
-        )
+            if (head.x === food.x && head.y === food.y){
+                food = {
+                    x: Math.floor(Math.random()*20)*20,
+                    y: Math.floor(Math.random()*20)*20
+                };
+            } else {
+                snake.pop();
+            }
 
-        if st.button("Valider"):
-            if answer == st.session_state.a + st.session_state.b:
-                st.success("✅ Bonne réponse !")
-                st.session_state.a = random.randint(1, 10)
-                st.session_state.b = random.randint(1, 10)
-            else:
-                st.error("❌ Mauvaise réponse")
+            ctx.fillStyle="green";
+            snake.forEach(s => ctx.fillRect(s.x,s.y,20,20));
+
+            ctx.fillStyle="red";
+            ctx.fillRect(food.x,food.y,20,20);
+        }
+
+        setInterval(game,150);
+        </script>
+        """,
+        height=450
+    )
+
+
+def space_invaders():
+    st.subheader("🚀 Space Invaders")
+
+    components.html(
+        """
+        <canvas id="game" width="400" height="400"></canvas>
+        <script>
+        const c = document.getElementById("game");
+        const ctx = c.getContext("2d");
+
+        let ship = {x:180,y:350};
+        let bullet = null;
+        let alien = {x:180,y:50};
+
+        document.addEventListener("keydown", e=>{
+            if(e.key==="ArrowLeft") ship.x-=20;
+            if(e.key==="ArrowRight") ship.x+=20;
+            if(e.key===" ") bullet={x:ship.x+10,y:ship.y};
+        });
+
+        function game(){
+            ctx.clearRect(0,0,400,400);
+
+            ctx.fillStyle="blue";
+            ctx.fillRect(ship.x,ship.y,40,20);
+
+            ctx.fillStyle="green";
+            ctx.fillRect(alien.x,alien.y,40,20);
+
+            if(bullet){
+                bullet.y-=10;
+                ctx.fillStyle="red";
+                ctx.fillRect(bullet.x,bullet.y,5,10);
+
+                if(bullet.y < alien.y+20){
+                    alien.x = Math.random()*360;
+                    bullet = null;
+                }
+            }
+        }
+
+        setInterval(game,50);
+        </script>
+        """,
+        height=450
+    )
+
 
 
 
