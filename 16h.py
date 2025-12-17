@@ -38,14 +38,14 @@ if "pause" not in st.session_state:
 
 if st.button("🧘 Je fais une pause"):
     st.session_state.pause = True
-
+grid_size = 20
 if "snake" not in st.session_state:
     st.session_state.snake = [(5, 5), (5, 4), (5, 3)]
     st.session_state.direction = "RIGHT"
     st.session_state.food = (random.randint(0, grid_size-1), random.randint(0, grid_size-1))
     st.session_state.game_over = False
 
-grid_size = 20
+
 st.title("🐍 Snake Game")
 
 
@@ -120,6 +120,7 @@ if st.button("Restart"):
 # Auto refresh
 time.sleep(0.3)
 st.experimental_rerun()
+
 
 
 
