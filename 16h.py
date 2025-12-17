@@ -101,7 +101,7 @@ if not st.session_state.game_over:
 # Draw grid
 grid = [["⬜" for _ in range(grid_size)] for _ in range(grid_size)]
 for x, y in st.session_state.snake:
-grid[x][y] = "🟩"
+    grid[x][y] = "🟩"
 fx, fy = st.session_state.food
 grid[fx][fy] = "🍎"
 
@@ -120,5 +120,6 @@ if st.button("Restart"):
 # Auto refresh
 time.sleep(0.3)
 st.experimental_rerun()
+
 
 
