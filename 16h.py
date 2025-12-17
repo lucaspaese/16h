@@ -38,13 +38,24 @@ if "pause" not in st.session_state:
 
 if st.button("🧘 Je fais une pause"):
     st.session_state.pause = True
+# Grid size
 grid_size = 20
+
+# --- Initialize session state safely ---
 if "snake" not in st.session_state:
     st.session_state.snake = [(5, 5), (5, 4), (5, 3)]
-    st.session_state.direction = "RIGHT"
-    st.session_state.food = (random.randint(0, grid_size-1), random.randint(0, grid_size-1))
-    st.session_state.game_over = False
 
+if "direction" not in st.session_state:
+    st.session_state.direction = "RIGHT"
+
+if "food" not in st.session_state:
+    st.session_state.food = (
+        random.randint(0, grid_size - 1),
+        random.randint(0, grid_size - 1),
+    )
+
+if "game_over" not in st.session_state:
+    st.session_state.game_over = False
 
 st.title("🐍 Snake Game")
 
@@ -70,8 +81,6 @@ with col8:
 # Move snake
 if not st.session_state.game_over:
     head_x, head_y = st.session_state.snake[0]
-
-
     if st.session_state.direction == "UP":
         head_x -= 1
     elif st.session_state.direction == "DOWN":
@@ -80,10 +89,7 @@ if not st.session_state.game_over:
         head_y -= 1
     elif st.session_state.direction == "RIGHT":
         head_y += 1
-
-
     new_head = (head_x, head_y)
-    
     
     # Collision
     if (head_x < 0 or head_x >= grid_size or head_y < 0 or head_y >= grid_size or new_head in st.session_state.snake):
@@ -120,6 +126,7 @@ if st.button("Restart"):
 # Auto refresh
 time.sleep(0.3)
 st.experimental_rerun()
+
 
 
 
