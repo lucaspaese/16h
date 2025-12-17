@@ -87,15 +87,15 @@ if not st.session_state.game_over:
     
     # Collision
     if (head_x < 0 or head_x >= grid_size or head_y < 0 or head_y >= grid_size or new_head in st.session_state.snake):
-    st.session_state.game_over = True
+        st.session_state.game_over = True
     else:
-    st.session_state.snake.insert(0, new_head)
+        st.session_state.snake.insert(0, new_head)
 
 
     if new_head == st.session_state.food:
-    st.session_state.food = (random.randint(0, grid_size-1), random.randint(0, grid_size-1))
+        st.session_state.food = (random.randint(0, grid_size-1), random.randint(0, grid_size-1))
     else:
-    st.session_state.snake.pop()
+        st.session_state.snake.pop()
 
 
 # Draw grid
@@ -120,4 +120,5 @@ if st.button("Restart"):
 # Auto refresh
 time.sleep(0.3)
 st.experimental_rerun()
+
 
