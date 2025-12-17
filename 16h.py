@@ -1,6 +1,7 @@
 import streamlit as st
 from datetime import datetime
 import random
+import time
 
 st.title("Vérification de l'heure")
 
@@ -26,80 +27,98 @@ if weekday == 4:  # 4 = vendredi
     else:
         st.write("⏳ Ce n'est pas encore midi.")
 
+st.write("---")
+
+# ===============================
+#        PAUSE + MINI-JEU
+# ===============================
+
 if "pause" not in st.session_state:
     st.session_state.pause = False
 
-if "game" not in st.session_state:
-    st.session_state.game = None
-
 if st.button("🧘 Je fais une pause"):
     st.session_state.pause = True
-    st.session_state.game = random.choice(["number", "rps", "math"])
-
-# ===============================
-#           JEUX
-# ===============================
 
 if st.session_state.pause:
+    st.subheader("🎮 Mini-jeu : PYTHON!!!")
 
-    # -------- Jeu 1 : Deviner le nombre --------
-    if st.session_state.game == "number":
-        st.subheader("🎯 Devine le nombre")
+        # Grid size
+    grid_size = 20
+    
+    
+    # Initialize session state
+    if "snake" not in st.session_state:
+    st.session_state.snake = [(5, 5), (5, 4), (5, 3)]
+    st.session_state.direction = "RIGHT"
+    st.session_state.food = (random.randint(0, grid_size-1), random.randint(0, grid_size-1))
+    st.session_state.game_over = False
+    
+    
+    st.title("🐍 Snake Game")
+    
+    
+    # Controls
+    col1, col2, col3 = st.columns(3)
+    with col2:
+    if st.button("⬆️"):
+    st.session_state.direction = "UP"
+    col4, col5, col6 = st.columns(3)
+    with col4:
+    if st.button("⬅️"):
+    st.session_state.direction = "LEFT"
+    with col6:
+    if st.button("➡️"):
+    st.session_state.direction = "RIGHT"
+    col7, col8, col9 = st.columns(3)
+    with col8:
+    if st.button("⬇️"):
+    st.session_state.direction = "DOWN"
+    
+    
+    # Move snake
+    if not st.session_state.game_over:
+    head_x, head_y = st.session_state.snake[0]
+    
+    
+    if st.session_state.direction == "UP":
+    head_x -= 1
+    elif st.session_state.direction == "DOWN":
+    head_x += 1
+    elif st.session_state.direction == "LEFT":
+    head_y -= 1
+    elif st.session_state.direction == "RIGHT":
+    head_y += 1
+    
+    
+    new_head = (head_x, head_y)
+    
+    
+    # Collision
+    if (head_x < 0 or head_x >= grid_size or head_y < 0 or head_y >= grid_size or new_head in st.session_state.snake):
+    st.session_state.game_over = True
+    else:
+    st.session_state.snake.insert(0, new_head)
+    
+    
+    if new_head == st.session_state.food:
+    st.session_state.food = (random.randint(0, grid_size-1), random.randint(0, grid_size-1))
+    else:
+    st.session_state.snake.pop()
+    
+    
+    # Draw grid
+    grid = [["⬜" for _ in range(grid_size)] for _ in range(grid_size)]
+    for x, y in st.session_state.snake:
+    grid[x][y] = "🟩"
+    fx, fy = st.session_state.food
+    grid[fx][fy] = "🍎"
+    
+    
+    st.markdown("<br>".join(["".join(row) for row in grid]), unsafe_allow_html=True)
+    
+    
+    if st.session_state.game_over:
+    st.error("💀 Game Over")
+    if st.button("Restart"):
+    st.experimental_rerun()
 
-        if "secret" not in st.session_state:
-            st.session_state.secret = random.randint(1, 10)
-
-        guess = st.number_input(
-            "Choisis un nombre entre 1 et 10",
-            1, 10, step=1
-        )
-
-        if st.button("Valider"):
-            if guess == st.session_state.secret:
-                st.success("🎉 Bravo !")
-                st.session_state.secret = random.randint(1, 10)
-            else:
-                st.error("❌ Raté, réessaie 😉")
-
-    # -------- Jeu 2 : Pierre Feuille Ciseaux --------
-    elif st.session_state.game == "rps":
-        st.subheader("✊✋✌ Pierre – Feuille – Ciseaux")
-
-        choices = ["Pierre", "Feuille", "Ciseaux"]
-        player = st.radio("Ton choix :", choices)
-
-        if st.button("Jouer"):
-            computer = random.choice(choices)
-            st.write(f"🤖 L'ordinateur a choisi **{computer}**")
-
-            if player == computer:
-                st.info("🤝 Égalité")
-            elif (
-                (player == "Pierre" and computer == "Ciseaux") or
-                (player == "Feuille" and computer == "Pierre") or
-                (player == "Ciseaux" and computer == "Feuille")
-            ):
-                st.success("🎉 Tu gagnes !")
-            else:
-                st.error("❌ Tu perds !")
-
-    # -------- Jeu 3 : Calcul rapide --------
-    elif st.session_state.game == "math":
-        st.subheader("🧠 Calcul rapide")
-
-        if "a" not in st.session_state:
-            st.session_state.a = random.randint(1, 10)
-            st.session_state.b = random.randint(1, 10)
-
-        answer = st.number_input(
-            f"Combien font {st.session_state.a} + {st.session_state.b} ?",
-            step=1
-        )
-
-        if st.button("Valider"):
-            if answer == st.session_state.a + st.session_state.b:
-                st.success("✅ Bonne réponse !")
-                st.session_state.a = random.randint(1, 10)
-                st.session_state.b = random.randint(1, 10)
-            else:
-                st.error("❌ Mauvaise réponse")
