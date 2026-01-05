@@ -29,103 +29,14 @@ if weekday == 4:  # 4 = vendredi
 
 st.write("---")
 
-# ===============================
-#        PAUSE + MINI-JEU
-# ===============================
+Savoir s’il est déjà 16 h revêt une importance particulière dans le cadre de la journée de travail. Cette heure symbolise un seuil, celui où les obligations professionnelles commencent à laisser place au temps personnel. Elle permet de prendre conscience du temps écoulé, d’évaluer l’avancement des tâches en cours et d’anticiper la fin de la journée.
 
-if "pause" not in st.session_state:
-    st.session_state.pause = False
+Être attentif à l’heure facilite également une meilleure organisation. À l’approche de 16 h, il devient possible de prioriser les actions restantes, de clôturer les dossiers importants et de préparer une transition sereine entre le travail et le retour à la maison. Cela contribue à limiter les imprévus de dernière minute et à éviter le stress lié à une mauvaise gestion du temps.
 
-if st.button("🧘 Je fais une pause"):
-    st.session_state.pause = True
-# Grid size
-grid_size = 20
+Par ailleurs, connaître précisément l’heure est essentiel pour respecter ses engagements personnels. Le départ du travail conditionne souvent les horaires de transport, les responsabilités familiales ou simplement le besoin légitime de repos. Savoir qu’il est déjà 16 h permet donc de planifier son trajet, d’optimiser son temps de déplacement et de préserver un équilibre sain entre vie professionnelle et vie privée.
 
-# --- Initialize session state safely ---
-if "snake" not in st.session_state:
-    st.session_state.snake = [(5, 5), (5, 4), (5, 3)]
+Enfin, cette attention portée à l’heure traduit une reconnaissance de la valeur du temps. Elle rappelle que le travail, aussi important soit-il, s’inscrit dans une journée plus large où le bien-être personnel a toute sa place. Ainsi, savoir s’il est déjà 16 h n’est pas un simple détail, mais un repère essentiel pour mieux vivre sa journée et rentrer chez soi dans de bonnes conditions.
 
-if "direction" not in st.session_state:
-    st.session_state.direction = "RIGHT"
-
-if "food" not in st.session_state:
-    st.session_state.food = (
-        random.randint(0, grid_size - 1),
-        random.randint(0, grid_size - 1),
-    )
-
-if "game_over" not in st.session_state:
-    st.session_state.game_over = False
-
-st.title("🐍 Snake Game")
-
-
-# Controls
-col1, col2, col3 = st.columns(3)
-with col2:
-    if st.button("⬆️"):
-        st.session_state.direction = "UP"
-col4, col5, col6 = st.columns(3)
-with col4:
-    if st.button("⬅️"):
-        st.session_state.direction = "LEFT"
-with col6:
-    if st.button("➡️"):
-        st.session_state.direction = "RIGHT"
-col7, col8, col9 = st.columns(3)
-with col8:
-    if st.button("⬇️"):
-        st.session_state.direction = "DOWN"
-
-
-# Move snake
-if not st.session_state.game_over:
-    head_x, head_y = st.session_state.snake[0]
-    if st.session_state.direction == "UP":
-        head_x -= 1
-    elif st.session_state.direction == "DOWN":
-        head_x += 1
-    elif st.session_state.direction == "LEFT":
-        head_y -= 1
-    elif st.session_state.direction == "RIGHT":
-        head_y += 1
-    new_head = (head_x, head_y)
-    
-    # Collision
-    if (head_x < 0 or head_x >= grid_size or head_y < 0 or head_y >= grid_size or new_head in st.session_state.snake):
-        st.session_state.game_over = True
-    else:
-        st.session_state.snake.insert(0, new_head)
-
-
-    if new_head == st.session_state.food:
-        st.session_state.food = (random.randint(0, grid_size-1), random.randint(0, grid_size-1))
-    else:
-        st.session_state.snake.pop()
-
-
-# Draw grid
-grid = [["⬜" for _ in range(grid_size)] for _ in range(grid_size)]
-for x, y in st.session_state.snake:
-    grid[x][y] = "🟩"
-fx, fy = st.session_state.food
-grid[fx][fy] = "🍎"
-
-
-st.markdown("<br>".join(["".join(row) for row in grid]), unsafe_allow_html=True)
-
-
-if st.session_state.game_over:
-    st.error("💀 Game Over")
-if st.button("Restart"):
-    for k in ["snake", "direction", "food", "game_over"]:
-        del st.session_state[k]
-    st.experimental_rerun()
-
-
-# Auto refresh
-time.sleep(0.3)
-st.experimental_rerun()
 
 
 
