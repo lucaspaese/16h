@@ -1,8 +1,4 @@
 datetime
 streamlit
-<<<<<<< HEAD
 os
-=======
-os
-PIL
->>>>>>> e18e3ab05b8716cdbd361138279f3b27fc296573
+
