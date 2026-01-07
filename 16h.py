@@ -5,7 +5,8 @@ from PIL import Image
 
 dossier_actuel = os.path.dirname(os.path.abspath(__file__))
 dossier_images = os.path.join(dossier_actuel, 'images')
-vict = Image.open(os.path.join(dossier_images, 'vict.jpg'))
+happy_vict = Image.open(os.path.join(dossier_images, 'vict.jpg'))
+sad_vict = Image.open(os.path.join(dossier_images, 'sad vict.png'))
 
 now = datetime.now()
 hour = now.hour
@@ -15,10 +16,12 @@ weekday = now.weekday()   # lundi = 0 ... dimanche = 6
 if hour >= 15:
     st.title("🕓 C'est déjà 16 heures !")
 
-    st.image(vict, width=400)
+    st.image(happy_vict, width=400)
 
 else:
     st.title("⏳ Ce n'est pas encore 16 heures.")
+
+    st.image(sad_vict, width=400)
 
 st.write("---")
 
