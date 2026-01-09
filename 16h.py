@@ -25,8 +25,6 @@ if weekday != 4:
 
         st.image(sad_vict, width=400)
 
-st.write("---")
-
 # --- Partie 2 : Vérifier si c'est vendredi ---
 if weekday == 4:  # 4 = vendredi
     st.title("🎉 C'est vendredi !")
