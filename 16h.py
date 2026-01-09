@@ -12,16 +12,18 @@ now = datetime.now()
 hour = now.hour
 weekday = now.weekday()   # lundi = 0 ... dimanche = 6
 
-# --- Partie 1 : Vérifier 16h ---
-if hour >= 15:
-    st.title("🕓 C'est déjà 16 heures !")
+if weekday != 4:
 
-    st.image(happy_vict, width=400)
+    # --- Partie 1 : Vérifier 16h ---
+    if hour >= 15:
+        st.title("🕓 C'est déjà 16 heures !")
 
-else:
-    st.title("⏳ Ce n'est pas encore 16 heures.")
+        st.image(happy_vict, width=400)
 
-    st.image(sad_vict, width=400)
+    else:
+        st.title("⏳ Ce n'est pas encore 16 heures.")
+
+        st.image(sad_vict, width=400)
 
 st.write("---")
 
@@ -32,8 +34,10 @@ if weekday == 4:  # 4 = vendredi
     # Sous-condition : vérifier midi
     if hour >= 11:
         st.title("🍽️ C'est déjà midi !")
+        st.image(happy_vict, width=400)
     else:
         st.title("⏳ Ce n'est pas encore midi.")
+        st.image(sad_vict, width=400)
 
 st.write("---")
 
